@@ -1,5 +1,6 @@
 #include "../sylar/config.h"
 #include "../sylar/log.h"
+/**
 
 // Ô¼¶¨
 sylar::ConfigVar<int>::ptr g_int_value_config =
@@ -183,7 +184,7 @@ void test_class() {
         SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << #prefix ": size = " << m.size();    \
     }
 
-    g_person->addListener(10, [](const Person &old_value, const Person &new_value)
+    g_person->addListener([](const Person &old_value, const Person &new_value)
                           { SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "old_value = " << old_value.toString()
                                                              << ", new_value = " << new_value.toString(); 
     });
@@ -200,6 +201,7 @@ void test_class() {
     XX_PM(g_person_map, class.map after);
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " << g_person_vec_map->toString();
 }
+*/
 
 void test_log() {
     static sylar::Logger::ptr system_log = SYLAR_LOG_NAME("system");
@@ -216,6 +218,12 @@ void test_log() {
     
     system_log->setFormatter("%d - %m%n");
     SYLAR_LOG_INFO(system_log) << "hello system" << std::endl;
+
+    sylar::Config::Visit([](sylar::ConfigVarBase::ptr var)
+                         { SYLAR_LOG_INFO(zhaoren_log) << "name = [" << var->getName() << "] "
+                                                      << " description = [" << var->getDescription() << "] "
+                                                      << " typename = [" << var->getTypeName() << "] "
+                                                      << " value = [" << var->toString()  << "] "; });
 }
 
 int main(int argc, char** argv) {

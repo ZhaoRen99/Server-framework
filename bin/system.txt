@@ -1,4 +1,102 @@
-2023-03-17 19:10:07	[INFO]	hello system
+2023-03-21 17:05:35	[INFO]	hello system
 
-2023-03-17 19:10:07	[INFO]	hello system
+2023-03-21 17:05:35	[INFO]	hello system
+
+2023-03-23 16:19:09	[INFO]	hello system
+
+2023-03-23 16:19:09	[INFO]	hello system
+
+2023-03-23 16:19:23	[INFO]	hello system
+
+2023-03-23 16:19:23	[INFO]	hello system
+
+2023-03-23 16:26:39	[INFO]	hello system
+
+2023-03-23 16:26:39	[INFO]	hello system
+
+2023-03-23 16:27:49	[INFO]	hello system
+
+2023-03-23 16:27:49	[INFO]	hello system
+
+2023-03-23 16:27:49	[INFO]	name = class.map description = class person map typename = St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE6PersonSt4lessIS5_ESaISt4pairIKS5_S6_EEE value = 
+2023-03-23 16:27:49	[INFO]	name = class.person description = class person typename = 6Person value = name: ""
+age: 0
+sex: false
+2023-03-23 16:27:49	[INFO]	name = class.vec_map description = class vec<person> map typename = St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt6vectorI6PersonSaIS7_EESt4lessIS5_ESaISt4pairIKS5_S9_EEE value = 
+2023-03-23 16:27:49	[INFO]	name = logs description = logs config typename = St3setIN5sylar9LogDefineESt4lessIS1_ESaIS1_EE value = - name: root
+  level: INFO
+  formatter: "%d%T%m%n"
+  appenders:
+    - type: FileLogAppender
+      file: root.txt
+    - type: StdoutLogAppender
+- name: system
+  level: DEBUG
+  formatter: "%d%T%m%n"
+  appenders:
+    - type: FileLogAppender
+      file: system.txt
+      formatter: "%d%T[%p]%T%m%n"
+    - type: StdoutLogAppender
+2023-03-23 16:27:49	[INFO]	name = system.int_list description = system int list typename = NSt7__cxx114listIiSaIiEEE value = - 1
+- 2
+2023-03-23 16:27:49	[INFO]	name = system.int_set description = system int set typename = St3setIiSt4lessIiESaIiEE value = - 1
+- 2
+2023-03-23 16:27:49	[INFO]	name = system.int_unordered_set description = system int unordered_set typename = St13unordered_setIiSt4hashIiESt8equal_toIiESaIiEE value = - 2
+- 1
+2023-03-23 16:27:49	[INFO]	name = system.int_vec description = system int vec typename = St6vectorIiSaIiEE value = - 1
+- 2
+2023-03-23 16:27:49	[INFO]	name = system.name description = system name typename = NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE value = adbc
+2023-03-23 16:27:49	[INFO]	name = system.port description = system port typename = i value = 8080
+2023-03-23 16:27:49	[INFO]	name = system.str_int_map description = system str int map typename = St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiSt4lessIS5_ESaISt4pairIKS5_iEEE value = k: 2
+2023-03-23 16:27:49	[INFO]	name = system.str_int_unordered_map description = system str int unordered_map typename = St13unordered_mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiSt4hashIS5_ESt8equal_toIS5_ESaISt4pairIKS5_iEEE value = k: 2
+2023-03-23 16:27:49	[INFO]	name = system.value description = system value typename = f value = 10.1999998
+2023-03-23 16:29:27	[INFO]	hello system
+
+2023-03-23 16:29:27	[INFO]	hello system
+
+2023-03-23 16:29:27	[INFO]	name = [class.map]  description = [class person map]  typename = [St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE6PersonSt4lessIS5_ESaISt4pairIKS5_S6_EEE]  value = [] 
+2023-03-23 16:29:27	[INFO]	name = [class.person]  description = [class person]  typename = [6Person]  value = [name: ""
+age: 0
+sex: false] 
+2023-03-23 16:29:27	[INFO]	name = [class.vec_map]  description = [class vec<person> map]  typename = [St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt6vectorI6PersonSaIS7_EESt4lessIS5_ESaISt4pairIKS5_S9_EEE]  value = [] 
+2023-03-23 16:29:27	[INFO]	name = [logs]  description = [logs config]  typename = [St3setIN5sylar9LogDefineESt4lessIS1_ESaIS1_EE]  value = [- name: root
+  level: INFO
+  formatter: "%d%T%m%n"
+  appenders:
+    - type: FileLogAppender
+      file: root.txt
+    - type: StdoutLogAppender
+- name: system
+  level: DEBUG
+  formatter: "%d%T%m%n"
+  appenders:
+    - type: FileLogAppender
+      file: system.txt
+      formatter: "%d%T[%p]%T%m%n"
+    - type: StdoutLogAppender] 
+2023-03-23 16:29:27	[INFO]	name = [system.int_list]  description = [system int list]  typename = [NSt7__cxx114listIiSaIiEEE]  value = [- 1
+- 2] 
+2023-03-23 16:29:27	[INFO]	name = [system.int_set]  description = [system int set]  typename = [St3setIiSt4lessIiESaIiEE]  value = [- 1
+- 2] 
+2023-03-23 16:29:27	[INFO]	name = [system.int_unordered_set]  description = [system int unordered_set]  typename = [St13unordered_setIiSt4hashIiESt8equal_toIiESaIiEE]  value = [- 2
+- 1] 
+2023-03-23 16:29:27	[INFO]	name = [system.int_vec]  description = [system int vec]  typename = [St6vectorIiSaIiEE]  value = [- 1
+- 2] 
+2023-03-23 16:29:27	[INFO]	name = [system.name]  description = [system name]  typename = [NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE]  value = [adbc] 
+2023-03-23 16:29:27	[INFO]	name = [system.port]  description = [system port]  typename = [i]  value = [8080] 
+2023-03-23 16:29:27	[INFO]	name = [system.str_int_map]  description = [system str int map]  typename = [St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiSt4lessIS5_ESaISt4pairIKS5_iEEE]  value = [k: 2] 
+2023-03-23 16:29:27	[INFO]	name = [system.str_int_unordered_map]  description = [system str int unordered_map]  typename = [St13unordered_mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiSt4hashIS5_ESt8equal_toIS5_ESaISt4pairIKS5_iEEE]  value = [k: 2] 
+2023-03-23 16:29:27	[INFO]	name = [system.value]  description = [system value]  typename = [f]  value = [10.1999998] 
+2023-03-23 16:31:58	[INFO]	hello system
+
+2023-03-23 16:31:58	[INFO]	hello system
+
+2023-03-23 16:39:04	[INFO]	hello system
+
+2023-03-23 16:39:04	[INFO]	hello system
+
+2023-03-23 16:46:19	[INFO]	hello system
+
+2023-03-23 16:46:19	[INFO]	hello system
 

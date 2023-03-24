@@ -13,8 +13,11 @@
 #include <functional>
 #include <time.h>
 #include <stdarg.h>
+
 #include "util.h"
 #include "singleton.h"
+#include "thread.h"
+#include "mutex.h"
 
 /**
  * @brief 使用流式方式将日志级别level的日志写入到logger
@@ -24,7 +27,7 @@
 	if (logger->getLevel() <= level) \
 		sylar::LogEventWarp(sylar::LogEvent::ptr (new sylar::LogEvent(logger, level, \
 				__FILE__, __LINE__, 0, sylar::GetThreadId(), \
-			sylar::GetFiberId(), time(0)))).getSS()
+			sylar::GetFiberId(), time(0), sylar::Thread::GetName()))).getSS()
 
 /**
  * @brief 使用流式方式将日志级别debug的日志写入到logger
@@ -64,7 +67,7 @@
 	if (logger->getLevel() <= level) \
 		sylar::LogEventWarp(sylar::LogEvent::ptr(new sylar::LogEvent(logger, level, \
 							__FILE__, __LINE__, 0, sylar::GetThreadId(), \
-					sylar::GetFiberId(), time(0)))).getEvent()->format(fmt, __VA_ARGS__)
+					sylar::GetFiberId(), time(0), sylar::Thread::GetName()))).getEvent()->format(fmt, __VA_ARGS__)
 
 /**
  * @brief 使用格式化方式将日志级别debug的日志写入到logger
@@ -167,7 +170,8 @@ public:
 	 */
 	LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level
 			, const char* file, int32_t line, uint32_t elapse
-			, uint32_t thread_id, uint32_t fiber_id, uint64_t time);
+			, uint32_t thread_id, uint32_t fiber_id, uint64_t time
+			, const std::string& thread_name);
 	/**
 	 * @brief 返回文件名
 	 * 
@@ -209,6 +213,11 @@ public:
 	 * @return uint64_t 
 	 */
 	uint64_t getTime() const { return m_time; }
+
+	/**
+	 * @brief 返回线程名称
+	*/
+	std::string getThreadName() const { return m_threadName; }
 
 	/**
 	 * @brief 返回日志内容
@@ -261,6 +270,7 @@ private:
 	uint32_t m_thieadId = 0;  	//线程id
 	uint32_t m_fiberId = 0;   	//协程id
 	uint64_t m_time;         	//时间戳
+	std::string m_threadName;	//线程名称
 	std::stringstream m_ss;    	//日志内容流
 	std::shared_ptr<Logger> m_logger;	//日志器
 	LogLevel::Level m_level;	//日志等级
@@ -389,9 +399,10 @@ private:
  * 
  */
 class LogAppender{
+friend class Logger;
 public:
 	typedef std::shared_ptr<LogAppender> ptr;
-	friend class Logger;
+	typedef Spinlock MutexType;
 	/**
 	 * @brief 析构函数
 	 *
@@ -425,7 +436,7 @@ public:
 	 * 
 	 * @return LogFormatter::ptr 
 	 */
-	LogFormatter::ptr getFormatter() const { return m_formatter; }
+	LogFormatter::ptr getFormatter();
 
 	/**
 	 * @brief 获取日志级别
@@ -438,6 +449,8 @@ protected:
 	LogLevel::Level m_level = LogLevel::DEBUG;
 	//日志格式器
 	LogFormatter::ptr m_formatter;
+	// 互斥锁
+	MutexType m_mutex;
 	// 是否有formatter
 	bool m_hasFormatter = false;
 };
@@ -447,9 +460,10 @@ protected:
  * 
  */
 class Logger : public std::enable_shared_from_this<Logger>{
+friend class LoggerManager;
 public:
 	typedef std::shared_ptr<Logger> ptr;
-	friend class LoggerManager;
+	typedef Spinlock MutexType;
 
 	/**
 	 * @brief 构造函数
@@ -563,7 +577,9 @@ private:
 	std::string m_name;
 	//日志级别
 	LogLevel::Level m_level;
-	//日志目标集合
+	// 互斥锁
+	MutexType m_mutex;
+	// 日志目标集合
 	std::list<LogAppender::ptr> m_appenders;
 	//日志格式器
 	LogFormatter::ptr m_formatter;
@@ -605,6 +621,8 @@ private:
 	std::string m_filename;
 	// 文件流
 	std::ofstream m_filestream;
+	// 每秒reopen一次，判断文件有没有被删
+	uint64_t m_lastTime = 0;
 };
 
 /**
@@ -613,9 +631,10 @@ private:
  */
 class LoggerManager {
 public:
+	typedef Spinlock MutexType;
 	/**
 	 * @brief 构造函数
-	 * 
+	 *
 	 */
 	LoggerManager();
 
@@ -641,6 +660,8 @@ public:
 	std::string toYamlString();
 
 private:
+	// 互斥锁
+	MutexType m_mutex;
 	// 日志器容器
 	std::map<std::string, Logger::ptr> m_loggers;
 	// 主日志器
