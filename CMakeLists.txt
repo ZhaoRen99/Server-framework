@@ -14,9 +14,13 @@ link_directories(/apps/sylar/lib)
 set(LIB_SRC
         sylar/config.cc
         sylar/fiber.cc
+        sylar/hook.cc
         sylar/log.cc
+        sylar/iomanager.cc
         sylar/mutex.cc
+        sylar/scheduler.cc
         sylar/thread.cc
+        sylar/timer.cc
         sylar/util.cc
     )
 
@@ -27,6 +31,7 @@ SET_TARGET_PROPERTIES (sylar_static PROPERTIES OUTPUT_NAME "sylar")
 
 set(LIBS
         sylar
+        dl
         yaml-cpp
         pthread
    )
@@ -56,6 +61,21 @@ add_executable(test_fiber tests/test_fiber.cc)
 add_dependencies(test_fiber sylar)
 force_redefine_file_macro_for_sources(test_fiber) #__FILE__
 target_link_libraries(test_fiber ${LIBS})
+
+add_executable(test_scheduler tests/test_scheduler.cc)
+add_dependencies(test_scheduler sylar)
+force_redefine_file_macro_for_sources(test_scheduler) #__FILE__
+target_link_libraries(test_scheduler ${LIBS})
+
+add_executable(test_iomanager tests/test_iomanager.cc)
+add_dependencies(test_iomanager sylar)
+force_redefine_file_macro_for_sources(test_iomanager) #__FILE__
+target_link_libraries(test_iomanager ${LIBS})
+
+add_executable(test_hook tests/test_hook.cc)
+add_dependencies(test_hook sylar)
+force_redefine_file_macro_for_sources(test_hook) #__FILE__
+target_link_libraries(test_hook ${LIBS})
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

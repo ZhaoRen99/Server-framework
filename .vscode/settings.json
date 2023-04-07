@@ -81,6 +81,10 @@
         "semaphore": "cpp",
         "stop_token": "cpp",
         "variant": "cpp",
-        "strstream": "cpp"
+        "strstream": "cpp",
+        "io_context": "cpp",
+        "timer": "cpp",
+        "executor": "cpp",
+        "netfwd": "cpp"
     }
 }
