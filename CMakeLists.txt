@@ -13,6 +13,7 @@ link_directories(/apps/sylar/lib)
 # set(CMAKE_BUILD_TYPE Debug)
 set(LIB_SRC
         sylar/config.cc
+        sylar/fdmanager.cc
         sylar/fiber.cc
         sylar/hook.cc
         sylar/log.cc

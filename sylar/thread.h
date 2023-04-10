@@ -2,10 +2,11 @@
 #define __SYLAR_THREAD_H__
 
 #include "mutex.h"
+#include "noncopyable.h"
 
 namespace sylar {
 
-class Thread {
+class Thread : public Noncopyable {
 public:
     typedef std::shared_ptr<Thread> ptr;
     Thread(std::function<void()> cb, const std::string &name);
@@ -19,24 +20,25 @@ public:
     /**
      * @brief 获得当前线程
     */
-    static Thread *GetThis();
+    static Thread* GetThis();
 
     /**
      * @brief 日志系统获取当先线程名称
     */
-    static const std::string &GetName();
+    static const std::string& GetName();
 
     /**
      * @brief 主线程并不是自己创建的，可以给主线程命名
     */
     static void SetName(const std::string& name);
+    
 private:
-    // 禁止拷贝构造
-    Thread(const Thread &) = delete;
-    Thread(const Thread &&) = delete;
-    Thread &operator=(const Thread &) = delete;
-
     static void* run(void* arg); 
+    // 禁止拷贝构造
+    // Thread(const Thread &) = delete;
+    // Thread(const Thread &&) = delete;
+    // Thread &operator=(const Thread &) = delete;
+
 private:
     // 线程id 
     pid_t m_id = -1;
