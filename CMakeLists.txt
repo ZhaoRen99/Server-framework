@@ -4,7 +4,7 @@ project(sylar)
 include (cmake/utils.cmake)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS}-rdynamic -O0 -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined")
+set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS}-rdynamic -O0 -ggdb -std=c++1y -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined")
 
 include_directories(.)
 include_directories(/apps/sylar/include)
@@ -12,14 +12,21 @@ link_directories(/apps/sylar/lib)
 
 # set(CMAKE_BUILD_TYPE Debug)
 set(LIB_SRC
+        sylar/address.cc
+        sylar/bytearray.cc
         sylar/config.cc
         sylar/fdmanager.cc
         sylar/fiber.cc
+        sylar/http/http.cc
+        sylar/http/httpclient_parser.rl.cc
+        sylar/http/http11_parser.rl.cc
+        sylar/http/http_parser.cc
         sylar/hook.cc
         sylar/log.cc
         sylar/iomanager.cc
         sylar/mutex.cc
         sylar/scheduler.cc
+        sylar/socket.cc
         sylar/thread.cc
         sylar/timer.cc
         sylar/util.cc
@@ -77,6 +84,26 @@ add_executable(test_hook tests/test_hook.cc)
 add_dependencies(test_hook sylar)
 force_redefine_file_macro_for_sources(test_hook) #__FILE__
 target_link_libraries(test_hook ${LIBS})
+
+add_executable(test_address tests/test_address.cc)
+add_dependencies(test_address sylar)
+force_redefine_file_macro_for_sources(test_address) #__FILE__
+target_link_libraries(test_address ${LIBS})
+
+add_executable(test_socket tests/test_socket.cc)
+add_dependencies(test_socket sylar)
+force_redefine_file_macro_for_sources(test_socket) #__FILE__
+target_link_libraries(test_socket ${LIBS})
+
+add_executable(test_bytearray tests/test_bytearray.cc)
+add_dependencies(test_bytearray sylar)
+force_redefine_file_macro_for_sources(test_bytearray) #__FILE__
+target_link_libraries(test_bytearray ${LIBS})
+
+add_executable(test_http tests/test_http.cc)
+add_dependencies(test_http sylar)
+force_redefine_file_macro_for_sources(test_http) #__FILE__
+target_link_libraries(test_http ${LIBS})
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

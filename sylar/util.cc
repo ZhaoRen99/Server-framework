@@ -6,7 +6,7 @@
 
 namespace sylar {
 
-sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static SYLAR__SYSTEM__LOG(g_logger);
 
 pid_t GetThreadId() {
     return syscall(SYS_gettid);

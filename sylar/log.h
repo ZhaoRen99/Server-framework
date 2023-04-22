@@ -109,6 +109,10 @@
 */
 #define SYLAR_LOG_NAME(name) sylar::LoggerMgr::GetInstance()->getLogger(name)
 
+#define SYLAR__ROOT__LOG(name) sylar::Logger::ptr name  = SYLAR_LOG_ROOT()
+
+#define SYLAR__SYSTEM__LOG(name) sylar::Logger::ptr name = SYLAR_LOG_NAME("system")
+
 
 namespace sylar{
 
