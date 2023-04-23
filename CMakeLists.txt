@@ -29,6 +29,7 @@ set(LIB_SRC
         sylar/socket.cc
         sylar/thread.cc
         sylar/timer.cc
+        sylar/tcp_server.cc
         sylar/util.cc
     )
 

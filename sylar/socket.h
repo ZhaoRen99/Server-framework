@@ -2,6 +2,7 @@
 #define __SYLAR_SOCKET_H__
 
 #include <memory>
+#include <iostream>
 
 #include "address.h"
 #include "noncopyable.h"
@@ -110,6 +111,8 @@ private:
     Address::ptr m_localAddress;
     Address::ptr m_remotrAddress;
 };
+
+std::ostream& operator<<(std::ostream& os, const Socket& sock);
 
 }
 
