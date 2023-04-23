@@ -13,14 +13,20 @@ public:
     typedef std::shared_ptr<HttpRequestParser> ptr;
     HttpRequestParser();
 
-    size_t execute(const char* data, size_t len, size_t off);
-    int isFinished() const;
-    int hasError() const;
+    size_t execute(char* data, size_t len);
+    int isFinished();
+    int hasError();
 
     HttpRequest::ptr getData() const { return m_data; }
+    void setError(int v) { m_error = v; }
+
+    uint64_t getContentLength();
 private:
     http_parser m_parser;
     HttpRequest::ptr m_data;
+    //1000: invalid method
+    //1001: invalid version
+    //1002: invalid filed
     int m_error;
 };
 
@@ -29,14 +35,19 @@ public:
     typedef std::shared_ptr<HttpResponseParser> ptr;
     HttpResponseParser();
 
-    size_t execute(const char* data, size_t len, size_t off);
-    int isFinished() const;
-    int hasError() const;
+    size_t execute(char* data, size_t len);
+    int isFinished();
+    int hasError();
 
     HttpRespons::ptr getData() const { return m_data; }
+    void setError(int v) { m_error = v; }
+
+    uint64_t getContentLength();
 private:
     httpclient_parser m_parser;
     HttpRespons::ptr m_data;
+    //1001: invalid version
+    //1002: invalid field
     int m_error;
 };
 

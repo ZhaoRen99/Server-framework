@@ -1,4 +1,5 @@
 #include "http.h"
+#include <sstream>
 
 namespace sylar {
 namespace http{
@@ -15,7 +16,7 @@ HttpMethod StringToHttpMethod(const std::string& m){
 
 HttpMethod CharsToHttpMethod(const char* m) {
 #define XX(num, name, string) \
-    if(strcmp(#string, m) == 0){ \
+    if(strncmp(#string, m, strlen(#string)) == 0){ \
         return HttpMethod::name; \
     } 
     HTTP_METHOD_MAP(XX)
@@ -132,7 +133,13 @@ bool HttpRequest::hasCookie(const std::string& key, std::string* val)  {
     return true;
 }
 
-std::ostream& HttpRequest::dump(std::ostream& os) {
+std::string HttpRequest::toString() const {
+    std::stringstream ss;
+    dump(ss);
+    return ss.str();
+}
+
+std::ostream& HttpRequest::dump(std::ostream& os) const {
 /*
     GET /URI HTTP/1.1
     Host: www.sylar.top
@@ -187,7 +194,13 @@ void HttpRespons::delHeader(const std::string& key) {
     m_headers.erase(key);
 }
 
-std::ostream& HttpRespons::dump(std::ostream& os) {
+std::string HttpRespons::toString() const {
+    std::stringstream ss;
+    dump(ss);
+    return ss.str();
+}
+
+std::ostream& HttpRespons::dump(std::ostream& os) const {
 /*
     HTTP/1.1 301 Moved Permanently
     Server: nginx/1.12.2

@@ -253,7 +253,8 @@ public:
         return getAs(m_cookies, key, def);
     }
 
-    std::ostream& dump(std::ostream& os);
+    std::ostream& dump(std::ostream& os) const;
+    std::string toString() const;
     
 private:
     // HTTP·½·¨
@@ -316,8 +317,9 @@ public:
         return getAs(m_headers, key, def);
     }
 
-    std::ostream& dump(std::ostream& os);
-
+    std::ostream& dump(std::ostream& os) const;
+    std::string toString() const;
+    
 private:
     HttpStatus m_status;
     uint8_t m_version;

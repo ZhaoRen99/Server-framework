@@ -298,7 +298,7 @@ public:
         const T getValue() const {
             RWMutexType::ReadLock lock(m_mutex);
             return m_val;
-            }
+        }
 
         void setValue(const T& v) {
             {
