@@ -18,5 +18,6 @@
 #include "bytearray.h"
 #include "./http/http.h"
 #include "./http/http_parser.h"
+#include "tcp_server.h"
 
 #endif

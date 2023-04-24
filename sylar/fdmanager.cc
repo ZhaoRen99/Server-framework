@@ -42,7 +42,7 @@ bool FdCtx::init() {
     if (m_isSocket) {
         int flag = fcntl_f(m_fd, F_GETFL, 0);
         if (!(flag & O_NONBLOCK)) {
-            fcntl_f(m_fd, F_GETFL, flag | O_NONBLOCK);
+            fcntl_f(m_fd, F_SETFL, flag | O_NONBLOCK);
         }
         m_sysNonblock = true;
     } else {
