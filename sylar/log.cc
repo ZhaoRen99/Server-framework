@@ -424,7 +424,8 @@ void LogFormatter::init(){
 	//string, format, type
 	std::vector<std::tuple<std::string, std::string, int>> vec;
 	std::string nstr;
-	for(size_t i = 0; i < m_pattern.size(); ++i) {
+	
+	for (size_t i = 0; i < m_pattern.size(); ++i) {
 		if (m_pattern[i] != '%')
 		{
 			nstr.append(1, m_pattern[i]);
@@ -437,7 +438,7 @@ void LogFormatter::init(){
 				continue;
 			}
 		}
-
+		
 		size_t n = i + 1;
 		int fmt_status = 0;
 		size_t fmt_begin = 0;
@@ -451,11 +452,10 @@ void LogFormatter::init(){
 				str = m_pattern.substr(i + 1, n - i - 1);
 				break;
 			}
-			if(fmt_status == 0){
-				if(m_pattern[n] == '{'){
+			if (fmt_status == 0) {
+				if (m_pattern[n] == '{') {
 					str = m_pattern.substr(i + 1, n - i - 1);
-					// std::cout << "11 *" << str << std::endl;
-					fmt_status = 1;	//è§£æžæ ¼å¼
+					fmt_status = 1;	//½âÎö¸ñÊ½
 					fmt_begin = n;
 					++n;
 					continue;
@@ -473,11 +473,12 @@ void LogFormatter::init(){
 			if (n == m_pattern.size()) {
 				if (str.empty()) {
 					str = m_pattern.substr(i + 1);
+					// std::cout << "33 *" << str << std::endl;
 				}
 			}
 		}
 		if(fmt_status == 0){
-			if(!nstr.empty()){
+			if (!nstr.empty()) {
 				vec.push_back(std::make_tuple(nstr, std::string(), 0));
 				nstr.clear();
 			}

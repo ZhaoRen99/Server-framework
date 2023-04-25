@@ -265,7 +265,7 @@ void IOManager::tickle() {
     if (!hasIdleThread()) {
         return;
     }
-    SYLAR_LOG_DEBUG(g_logger) << "tickle() success";
+    // SYLAR_LOG_DEBUG(g_logger) << "tickle() success";
     int rt = write(m_tickleFds[1], "T", 1);
     SYLAR_ASSERT(rt == 1);
 }
@@ -316,8 +316,8 @@ void IOManager::idle() {
                 next_timeout = MAX_TIMEOUT;
             }
             rt = epoll_wait(m_epfd, events, 64, (int)next_timeout);
-            SYLAR_LOG_DEBUG(g_logger) << "epoll wait rt = " << rt;
-            SYLAR_LOG_DEBUG(g_logger) << "next_timeout = " << next_timeout;
+            // SYLAR_LOG_DEBUG(g_logger) << "epoll wait rt = " << rt;
+            // SYLAR_LOG_DEBUG(g_logger) << "next_timeout = " << next_timeout;
             // 有时就算有数据回来，操作系统也会有可能使errno为EINTR
             // 操作系统在数据回来之前强制中断了，尝试一下次的epoll_wait
             if(rt < 0 && errno == EINTR) {
@@ -328,7 +328,7 @@ void IOManager::idle() {
         std::vector<std::function<void()> > cbs;
 
         listExpiredCb(cbs);
-        SYLAR_LOG_DEBUG(g_logger) << "listExpiredCb : " << cbs.size();
+        // SYLAR_LOG_DEBUG(g_logger) << "listExpiredCb : " << cbs.size();
 
         if (!cbs.empty()) {
             Scheduler::schedule(cbs.begin(), cbs.end());

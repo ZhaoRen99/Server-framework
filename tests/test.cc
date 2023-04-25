@@ -3,7 +3,7 @@
 #include "../sylar/util.h"
 
 int main(int argc, char** argv){
-    std::cout << "hello sylar log" << std::endl;
+    std::cout << "\nhello sylar log" << std::endl;
 
     // sylar::Logger::ptr logger(new sylar::Logger("zhaoren"));
     // logger->addAppender(sylar::LogAppender::ptr(new sylar::StdoutLogAppender));
@@ -23,9 +23,11 @@ int main(int argc, char** argv){
     // SYLARY_LOG_FMT_ERROR(logger, "test macro fmt error %s", "aa");
 
     // sylar::Logger::ptr l
-    auto l = sylar::LoggerMgr::GetInstance()->getLogger("");
-    std::cout << std::endl;
-    SYLAR_LOG_INFO (l) << "xxx";
+    // auto l = sylar::LoggerMgr::GetInstance()->getLogger("");
+    // std::cout << std::endl;
+    // SYLAR_LOG_INFO (l) << "xxx";
+    SYLAR__ROOT__LOG(g_logger);
+    SYLAR_LOG_INFO(g_logger) << "hello";
     return 0;
 }
 
