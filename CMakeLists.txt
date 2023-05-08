@@ -21,12 +21,15 @@ set(LIB_SRC
         sylar/http/httpclient_parser.rl.cc
         sylar/http/http11_parser.rl.cc
         sylar/http/http_parser.cc
+        sylar/http/http_session.cc
         sylar/hook.cc
         sylar/log.cc
         sylar/iomanager.cc
         sylar/mutex.cc
         sylar/scheduler.cc
         sylar/socket.cc
+        sylar/stream.cc
+        sylar/socket_stream.cc
         sylar/thread.cc
         sylar/timer.cc
         sylar/tcp_server.cc

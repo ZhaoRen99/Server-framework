@@ -236,6 +236,14 @@ std::ostream& HttpRespons::dump(std::ostream& os) const {
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const HttpRequest& req) {
+    return req.dump(os);
+}
+
+std::ostream& operator<<(std::ostream& os, const HttpRespons& req) {
+    return req.dump(os);
+}
+
 }
 }
 

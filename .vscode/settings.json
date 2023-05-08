@@ -85,6 +85,8 @@
         "io_context": "cpp",
         "timer": "cpp",
         "executor": "cpp",
-        "netfwd": "cpp"
+        "netfwd": "cpp",
+        "buffer": "cpp",
+        "socket": "cpp"
     }
 }
