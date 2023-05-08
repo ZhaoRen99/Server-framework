@@ -234,15 +234,15 @@ public:
     }
 
     ~CASLock() {
-        while (std::atomic_flag_test_and_set_explicit(&m_mutex, std::memory_order_acquire));
+        
     }
 
     void lock() {
-        std::atomic_flag_clear_explicit(&m_mutex, std::memory_order_release);
+        while (std::atomic_flag_test_and_set_explicit(&m_mutex, std::memory_order_acquire));
     }
 
     void unlock() {
-
+        std::atomic_flag_clear_explicit(&m_mutex, std::memory_order_release);
     }
 private:
     // volatle 保证对地址的稳定访问， 编译器会优化直接用上次读取的数据赋值

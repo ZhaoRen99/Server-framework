@@ -267,80 +267,80 @@ public:
             
         }
 
-        std::string toString() override {
-            try{
-                // return boost::lexical_cast<std::string>(m_val);
-                RWMutexType::ReadLock lock(m_mutex);
-                return ToStr()(m_val);
-            }
-            catch (std::exception &e)
-            {
-                SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::toString exception"
-                    << e.what() << "convert: " << typeid(m_val).name() << "to String";
-            }
-            return "";
-        }
-
-        bool fromString(const std::string& val) override {
-            try {
-                // m_val = boost::lexical_cast<T>(val);
-                setValue(FromStr()(val));
-            }
-            catch (std::exception &e)
-            {
-                SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::fromString exception "
-                    << e.what() << " convert: String to " << typeid(m_val).name()
-                    << " - " << val;
-            }
-            return false;
-        }
-
-        const T getValue() const {
+    std::string toString() override {
+        try{
+            // return boost::lexical_cast<std::string>(m_val);
             RWMutexType::ReadLock lock(m_mutex);
-            return m_val;
+            return ToStr()(m_val);
         }
-
-        void setValue(const T& v) {
-            {
-                RWMutexType::ReadLock lock(m_mutex);
-                if (v == m_val) {
-                    return;
-                }
-                for (auto& i : m_cbs) {
-                    i.second(m_val, v);
-                }
-            }
-            RWMutexType::WriteLock lock(m_mutex);
-            m_val = v;
+        catch (std::exception &e)
+        {
+            SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::toString exception"
+                << e.what() << "convert: " << typeid(m_val).name() << "to String";
         }
+        return "";
+    }
 
-        std::string getTypeName() const override { return typeid(T).name(); }
-
-        uint64_t addListener(on_change_cb cb) {
-            static uint64_t s_fun_id = 0;
-            RWMutexType::WriteLock lock(m_mutex);
-            ++s_fun_id;
-            m_cbs[s_fun_id] = cb;
-
-            return s_fun_id;
+    bool fromString(const std::string& val) override {
+        try {
+            // m_val = boost::lexical_cast<T>(val);
+            setValue(FromStr()(val));
         }
-
-        void delListener(uint64_t key) {
-            RWMutexType::WriteLock lock(m_mutex);
-
-            m_cbs.erase(key);
+        catch (std::exception &e)
+        {
+            SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::fromString exception "
+                << e.what() << " convert: String to " << typeid(m_val).name()
+                << " - " << val;
         }
+        return false;
+    }
 
-        on_change_cb getListener(uint64_t key) {
+    const T getValue() const {
+        RWMutexType::ReadLock lock(m_mutex);
+        return m_val;
+    }
+
+    void setValue(const T& v) {
+        {
             RWMutexType::ReadLock lock(m_mutex);
-            auto it = m_cbs.find(key);
-            return it == m_cbs.end() ? nullptr : it->second;
+            if (v == m_val) {
+                return;
+            }
+            for (auto& i : m_cbs) {
+                i.second(m_val, v);
+            }
         }
+        RWMutexType::WriteLock lock(m_mutex);
+        m_val = v;
+    }
 
-        void clearListener() {
-            RWMutexType::WriteLock lock(m_mutex);
-            m_cbs.clear();
-        }
+    std::string getTypeName() const override { return typeid(T).name(); }
+
+    uint64_t addListener(on_change_cb cb) {
+        static uint64_t s_fun_id = 0;
+        RWMutexType::WriteLock lock(m_mutex);
+        ++s_fun_id;
+        m_cbs[s_fun_id] = cb;
+
+        return s_fun_id;
+    }
+
+    void delListener(uint64_t key) {
+        RWMutexType::WriteLock lock(m_mutex);
+
+        m_cbs.erase(key);
+    }
+
+    on_change_cb getListener(uint64_t key) {
+        RWMutexType::ReadLock lock(m_mutex);
+        auto it = m_cbs.find(key);
+        return it == m_cbs.end() ? nullptr : it->second;
+    }
+
+    void clearListener() {
+        RWMutexType::WriteLock lock(m_mutex);
+        m_cbs.clear();
+    }
 
 private:
     T m_val;

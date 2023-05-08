@@ -243,4 +243,11 @@ uint64_t Fiber::GetFiberId() {
     }
     return 0;
 }
+
+void Fiber::Yield() {
+    Fiber::ptr cur = GetThis();
+    cur->setState(Fiber::HOLD);
+    cur->back();
+}
+
 }

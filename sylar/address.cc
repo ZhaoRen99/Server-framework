@@ -10,7 +10,7 @@
 
 namespace sylar {
 
-static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+static SYLAR__SYSTEM__LOG(g_logger);
 
 template<class T>
 static T CreateMask(uint32_t bits) {

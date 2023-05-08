@@ -228,8 +228,8 @@ LogEvent::LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level
 Logger::Logger(const std::string& name)
 	:m_name(name) 
 	,m_level(LogLevel::DEBUG){
-		 
-		m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
+
+	m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
 }
 
 void Logger::addAppender(LogAppender::ptr appender){
@@ -420,7 +420,7 @@ std::string LogFormatter::format (std::shared_ptr<Logger> logger, LogLevel::Leve
 
 //%xxx %xxx{xxx} %%
 // m_pattern "%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
-void LogFormatter::init(){ 
+void LogFormatter::init() {
 	//string, format, type
 	std::vector<std::tuple<std::string, std::string, int>> vec;
 	std::string nstr;
