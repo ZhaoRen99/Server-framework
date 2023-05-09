@@ -174,33 +174,33 @@ std::ostream& HttpRequest::dump(std::ostream& os) const {
     return os;
 }
 
-HttpRespons::HttpRespons(uint8_t version, bool close)
+HttpResponse::HttpResponse(uint8_t version, bool close)
     :m_status(HttpStatus::OK)
     ,m_version(version)
     ,m_close(close) {
 
 }
 
-std::string HttpRespons::getHeader(const std::string& key, const std::string& def) const {
+std::string HttpResponse::getHeader(const std::string& key, const std::string& def) const {
     auto it = m_headers.find(key);
     return it == m_headers.end() ? def : it->second;
 }
 
-void HttpRespons::setHeader(const std::string& key, const std::string& value) {
+void HttpResponse::setHeader(const std::string& key, const std::string& value) {
     m_headers[key] = value;
 }
 
-void HttpRespons::delHeader(const std::string& key) {
+void HttpResponse::delHeader(const std::string& key) {
     m_headers.erase(key);
 }
 
-std::string HttpRespons::toString() const {
+std::string HttpResponse::toString() const {
     std::stringstream ss;
     dump(ss);
     return ss.str();
 }
 
-std::ostream& HttpRespons::dump(std::ostream& os) const {
+std::ostream& HttpResponse::dump(std::ostream& os) const {
 /*
     HTTP/1.1 301 Moved Permanently
     Server: nginx/1.12.2
@@ -240,7 +240,7 @@ std::ostream& operator<<(std::ostream& os, const HttpRequest& req) {
     return req.dump(os);
 }
 
-std::ostream& operator<<(std::ostream& os, const HttpRespons& req) {
+std::ostream& operator<<(std::ostream& os, const HttpResponse& req) {
     return req.dump(os);
 }
 

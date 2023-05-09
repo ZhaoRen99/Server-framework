@@ -282,11 +282,11 @@ private:
     MapType m_cookies;
 };
 
-class HttpRespons {
+class HttpResponse {
 public:
-    typedef std::shared_ptr<HttpRespons> ptr;
+    typedef std::shared_ptr<HttpResponse> ptr;
     typedef std::map<std::string, std::string, CaseInsensitiveLess> MapType;
-    HttpRespons(uint8_t version = 0x11, bool close = true);
+    HttpResponse(uint8_t version = 0x11, bool close = true);
 
     HttpStatus getStatus() const { return m_status; }
     uint8_t getverson() const { return m_version; }
@@ -330,7 +330,7 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& os, const HttpRequest& req);
-std::ostream& operator<<(std::ostream& os, const HttpRespons& req);
+std::ostream& operator<<(std::ostream& os, const HttpResponse& req);
 
 }
 }

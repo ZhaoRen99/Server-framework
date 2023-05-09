@@ -8,7 +8,7 @@ void test_request() {
 }
 
 void test_response() {
-    sylar::http::HttpRespons::ptr rep(new sylar::http::HttpRespons);
+    sylar::http::HttpResponse::ptr rep(new sylar::http::HttpResponse);
     rep->setHeader("X-X", "sylar");
     rep->setBody("hello sylar");
     rep->setStatue((sylar::http::HttpStatus)400);

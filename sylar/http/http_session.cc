@@ -72,7 +72,7 @@ HttpRequest::ptr HttpSession::recvRequest() {
     return parser->getData();
 }
 
-int HttpSession::sendResponse(HttpRespons::ptr rsp) {
+int HttpSession::sendResponse(HttpResponse::ptr rsp) {
     std::stringstream ss;
     ss << *rsp;
     std::string data = ss.str();

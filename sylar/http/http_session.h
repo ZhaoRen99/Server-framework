@@ -12,7 +12,7 @@ public:
     typedef std::shared_ptr<HttpSession> ptr;
     HttpSession(Socket::ptr sock, bool owern = true);
     HttpRequest::ptr recvRequest();
-    int sendResponse(HttpRespons::ptr rsp);
+    int sendResponse(HttpResponse::ptr rsp);
 };
     
 }

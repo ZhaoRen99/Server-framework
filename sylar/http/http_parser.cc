@@ -108,6 +108,17 @@ void on_http_field(void* data, const char* field, size_t flen
         parser->setError(1002);
         return;
     }
+    
+    std::string key(field, flen);
+    if (!strcasecmp("Connection", key.c_str())) {
+        std::string v(value, vlen);
+        if (!strcasecmp("keep-alive", v.c_str())) {
+            parser->getData()->setClose(false);
+        } else if (!strcasecmp("close", v.c_str())) {
+            parser->getData()->setClose(true);
+        }
+    }
+    
     parser->getData()->setHeader(std::string(field, flen)
                                 ,std::string(value, vlen));
 }
@@ -204,7 +215,7 @@ void on_response_http_field(void* data, const char* field, size_t flen
 
 HttpResponseParser::HttpResponseParser()
     :m_error(0) {
-    m_data.reset(new sylar::http::HttpRespons);
+    m_data.reset(new sylar::http::HttpResponse);
 
     httpclient_parser_init(&m_parser);
     m_parser.reason_phrase = on_response_reason;

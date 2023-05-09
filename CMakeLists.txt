@@ -24,6 +24,7 @@ set(LIB_SRC
         sylar/http/http_parser.cc
         sylar/http/http_session.cc
         sylar/http/http_server.cc
+        sylar/http/servlet.cc
         sylar/hook.cc
         sylar/log.cc
         sylar/iomanager.cc
