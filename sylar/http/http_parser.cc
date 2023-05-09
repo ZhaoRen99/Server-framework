@@ -82,9 +82,9 @@ void on_request_query(void* data, const char* at, size_t length) {
 void on_request_version(void* data, const char* at, size_t length) {
     HttpRequestParser* parser = static_cast<HttpRequestParser*> (data);
     uint8_t v = 0;
-    if (strcmp(at, "HTTP/1.1") == 0) {
+    if (strncmp(at, "HTTP/1.1", length) == 0) {
         v = 0x11;
-    } else if (strcmp(at, "HTTP/1.0") == 0) {
+    } else if (strncmp(at, "HTTP/1.0", length) == 0) {
         v = 0x10;
     } else {
         SYLAR_LOG_WARN(g_logger) << "invalid http request version: "
@@ -168,9 +168,9 @@ void on_response_chunk(void* data, const char* at, size_t length) {
 void on_response_version(void* data, const char* at, size_t length) {
     HttpResponseParser* parser = static_cast<HttpResponseParser*>(data);
     uint8_t v = 0;
-    if (strcmp(at, "HTTP/1.1") == 0) {
+    if (strncmp(at, "HTTP/1.1", length) == 0) {
         v = 0x11;
-    } else if (strcmp(at, "HTTP/1.0") == 0) {
+    } else if (strncmp(at, "HTTP/1.0",length) == 0) {
         v = 0x10;
     } else {
         SYLAR_LOG_WARN(g_logger) << "invalid http response version: "
