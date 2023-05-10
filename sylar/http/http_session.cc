@@ -23,6 +23,7 @@ HttpRequest::ptr HttpSession::recvRequest() {
         // 在offset后面接着读数据
         int len = read(data + offset, buff_size - offset);
         if (len <= 0) {
+            close();
             return nullptr;
         }
         // 当前已经读取的数据长度
@@ -31,12 +32,14 @@ HttpRequest::ptr HttpSession::recvRequest() {
         // execute会将data向前移动nparse个字节，nparse为已经成功解析的字节数
         size_t nparse = parser->execute(data, len);
         if (parser->hasError()) {
+            close();
             return nullptr;
         }
         // 此时data还剩下len - nparse个字节
         offset = len - nparse;
         // 缓冲区满了还没解析完
         if (offset == (int)buff_size) {
+            close();
             return nullptr;
         }
         // 解析结束
@@ -48,20 +51,24 @@ HttpRequest::ptr HttpSession::recvRequest() {
     int64_t length = parser->getContentLength();
     if (length > 0) {
         std::string body;
-        body.reserve(length);
+        body.resize(length);
 
+        int len = 0;
         // 如果长度比缓冲区剩余的还大，将缓冲区全部加进来
         if (length >= offset) {
-            body.append(data, offset);
+            mempcpy(&body[0], data, offset);
+            len = offset;
         } else {
             // 否则将取length
-            body.append(data, length);
+            memcpy(&body[0], data, length);
+            len = length;
         }
 
         length -= offset;
         // 缓冲区里的数据也不够，继续读取直到满足length
         if (length > 0) {
-            if (readFixSize(&body[body.size()], length) <= 0) {
+            if (readFixSize(&body[len], length) <= 0) {
+                close();
                 return nullptr;
             }
         }

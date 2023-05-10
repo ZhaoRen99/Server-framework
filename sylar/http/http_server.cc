@@ -23,7 +23,6 @@ void HttpServer::handleClient(Socket::ptr client) {
                 << " cliet: " << *client;
             break;
         }
-        SYLAR_LOG_DEBUG(g_logger) << req->isClosed() << "------" << !m_isKeepalive;
         HttpResponse::ptr rsp(new HttpResponse(req->getVersion()
                                 , req->isClosed() || !m_isKeepalive));
         m_dispatch->handle(req, rsp, session);

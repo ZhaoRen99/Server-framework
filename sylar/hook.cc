@@ -125,6 +125,9 @@ retry:
     }
     // 阻塞状态
     if (n == -1 && errno == EAGAIN) {
+        //重置EAGIN(errno = 11)，不在向上返回该错误
+        errno = 0; 
+        
         sylar::IOManager* iom = sylar::IOManager::GetThis();
         sylar::Timer::ptr timer;
         std::weak_ptr<timer_info> winfo(tinfo);
