@@ -4,6 +4,15 @@
 
 static SYLAR__ROOT__LOG(g_logger);
 
+void test_pool() {
+    sylar::http::HttpConnectionPool::ptr pool(new sylar::http::HttpConnectionPool(
+        "www.sylar.top", "", 80, 10, 1000 * 30, 5));
+    sylar::IOManager::GetThis()->addTimer(1000, [pool]() {
+            auto r = pool->doGet("/", 300);
+            SYLAR_LOG_INFO(g_logger) << r->toString();
+        }, true);
+}
+
 void run() {
     sylar::Address::ptr addr = sylar::Address::LookupAnyIPAddress("www.sylar.top:80");
     if (!addr) {
@@ -32,11 +41,20 @@ void run() {
         return;
     }
     SYLAR_LOG_INFO(g_logger) << "rsp:" << std::endl << *rsp;
+
+    SYLAR_LOG_INFO(g_logger) << "===================";
+
+    auto r = sylar::http::HttpConnection::DoGet("http://www.sylar.top/blog/", 300);
+    SYLAR_LOG_INFO(g_logger) << "result = " << r->result
+        << " error = " << r->error
+        << " rsp = " << (r->response ? r->response->toString() : "");
+
+    SYLAR_LOG_INFO(g_logger) << "===================";
+    test_pool();
 }
 
 int main(int argc, char** argv) {
     sylar::IOManager iom(2);
     iom.schedule(run);
     return 0;
-
 }
