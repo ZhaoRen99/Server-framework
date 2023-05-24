@@ -319,6 +319,10 @@ public:
 
     std::ostream& dump(std::ostream& os) const;
     std::string toString() const;
+
+    void setCookie(const std::string& key, const std::string& val,
+        time_t expired, const std::string& path,
+        const std::string& domain, bool secure);
     
 private:
     HttpStatus m_status;
@@ -327,6 +331,8 @@ private:
     std::string m_body;
     std::string m_reason;
     MapType m_headers;
+
+    std::vector<std::string> m_cookies;
 };
 
 std::ostream& operator<<(std::ostream& os, const HttpRequest& req);

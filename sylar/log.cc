@@ -4,6 +4,8 @@
 
 namespace sylar{
 
+static SYLAR__SYSTEM__LOG(g_logger);
+
 const char* LogLevel::ToString(LogLevel::Level level){
 	switch (level){	
 #define XX(name) \
@@ -352,7 +354,7 @@ void FileLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level,
 		}
 		MutexType::Lock lock(m_mutex);
 		if (!(m_filestream << m_formatter->format(logger, level, event))) {
-			std::cout << "error" << std::endl;
+			std::cout << "FileLogAppender::log error" << std::endl;
 		}
 	}
 }
@@ -691,7 +693,7 @@ struct LogIniter {
 	LogIniter() {
 		g_log_defines->addListener([](const std::set<LogDefine>& old_value
 					, const std::set<LogDefine>& new_value) {
-			SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "on_logger_conf_changed";
+			SYLAR_LOG_INFO(g_logger) << "on_logger_conf_changed";
 			for(auto& i : new_value) {
 				auto it = old_value.find(i);
 				sylar::Logger::ptr logger;

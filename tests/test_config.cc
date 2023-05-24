@@ -1,5 +1,6 @@
 #include "../sylar/config.h"
 #include "../sylar/log.h"
+#include "../sylar/env.h"
 /**
 
 // Ô¼¶¨
@@ -226,10 +227,20 @@ void test_log() {
                                                       << " value = [" << var->toString()  << "] "; });
 }
 
+void test_loadconf() {
+    sylar::Config::LoadFromConfDir("conf");
+}
+
 int main(int argc, char** argv) {
     // test_config();
     // test_yaml();
     // test_class();
-    test_log();
+    // test_log();
+    sylar::EnvMgr::GetInstance()->init(argc, argv);
+    test_loadconf();
+    std::cout << "====" << std::endl;
+    sleep(10);
+    test_loadconf();
+    
     return 0;
 }

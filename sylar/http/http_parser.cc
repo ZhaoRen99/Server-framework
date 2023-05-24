@@ -128,7 +128,7 @@ void on_request_header_done(void* data, const char* at, size_t length) {
 
 }
 
-void on_http_field(void* data, const char* field, size_t flen
+void on_request_http_field(void* data, const char* field, size_t flen
         , const char* value, size_t vlen) {
     HttpRequestParser* parser = static_cast<HttpRequestParser*> (data); 
     if (flen == 0) {
@@ -163,7 +163,7 @@ HttpRequestParser::HttpRequestParser()
     m_parser.query_string = on_request_query;
     m_parser.http_version = on_request_version;
     m_parser.header_done = on_request_header_done;
-    m_parser.http_field = on_http_field;
+    m_parser.http_field = on_request_http_field;
     m_parser.data = this;
 }
 

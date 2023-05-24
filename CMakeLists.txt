@@ -4,7 +4,7 @@ project(sylar)
 include (cmake/utils.cmake)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS}-rdynamic -O0 -ggdb -std=c++1y -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined")
+set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS}-rdynamic -O3 -ggdb -std=c++1y -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined")
 
 include_directories(.)
 include_directories(/apps/sylar/include)
@@ -14,8 +14,11 @@ link_directories(/apps/sylar/lib64)
 # set(CMAKE_BUILD_TYPE Debug)
 set(LIB_SRC
         sylar/address.cc
+        sylar/application.cc
         sylar/bytearray.cc
         sylar/config.cc
+        sylar/daemon.cc
+        sylar/env.cc
         sylar/fdmanager.cc
         sylar/fiber.cc
         sylar/http/http.cc
@@ -73,6 +76,9 @@ sylar_add_executable(echo_server "examples/echo_server.cc" sylar "${LIBS}")
 sylar_add_executable(test_http_server "tests/test_http_server.cc" sylar "${LIBS}")
 sylar_add_executable(test_http_connection "tests/test_http_connection.cc" sylar "${LIBS}")
 sylar_add_executable(test_uri "tests/test_uri.cc" sylar "${LIBS}")
+sylar_add_executable(test_daemon "tests/test_daemon.cc" sylar "${LIBS}")
+sylar_add_executable(test_env "tests/test_env.cc" sylar "${LIBS}")
+sylar_add_executable(test_application "tests/test_application.cc" sylar "${LIBS}")
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

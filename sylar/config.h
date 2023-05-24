@@ -398,6 +398,7 @@ public:
     }
 
     static void LoadFromYaml(const YAML::Node &root);
+    static void LoadFromConfDir(const std::string& path);
     static ConfigVarBase::ptr LookupBase(const std::string& name);
 
     static void Visit(std::function<void(ConfigVarBase::ptr)> cb);
