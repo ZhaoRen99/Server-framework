@@ -47,7 +47,7 @@ void hook_init() {
 // RTLD_NEXT 返回第一个匹配到的 "name" 的函数地址
 // 取出原函数，赋值给新函数
 #define XX(name) name ## _f = (name ## _fun)dlsym(RTLD_NEXT, #name);
-    HOOK_FUN(XX);
+    HOOK_FUN(XX)
 #undef XX
 }
 
@@ -105,8 +105,8 @@ static ssize_t do_io(int fd, OriginFun fun, const char* hook_fun_name,
         return -1;
     }
 
-    // 不是socket && 用户设置了非阻塞
-    if (!ctx->isSocket() && ctx->getUserNonblock()) {
+    // 不是socket 或者 用户设置了非阻塞
+    if (!ctx->isSocket() || ctx->getUserNonblock()) {
         return fun(fd, std::forward<Args>(args)...);
     }
 
@@ -118,7 +118,7 @@ static ssize_t do_io(int fd, OriginFun fun, const char* hook_fun_name,
 retry:
     // 先执行fun 读数据或写数据 若函数返回值有效就直接返回 若为 -1
     ssize_t n = fun(fd, std::forward<Args>(args)...);
-    SYLAR_LOG_DEBUG(sylar::g_logger) << "do_io <" << hook_fun_name << ">" << " n = " << n;
+    SYLAR_LOG_DEBUG(sylar::g_logger) << "do_io <" << hook_fun_name << ">" << " n=" << n << " errno=" << errno;
     // 中断则重试
     while (n == -1 && errno == EINTR) {
         n = fun(fd, std::forward<Args>(args)...);
@@ -169,9 +169,7 @@ retry:
             //swapOut fiber_state->Hold 
             // 1) 超时了， timer cancelEvent triggerEvent会唤醒回来 
             // 2) addEvent数据回来了会唤醒回来
-            SYLAR_LOG_DEBUG(sylar::g_logger) << "do_io Tield be <" << hook_fun_name << ">";
             sylar::Fiber::YieldToHold();
-            SYLAR_LOG_DEBUG(sylar::g_logger) << "do_io Tield af<" << hook_fun_name << ">";
             if (timer) {
                 timer->cancel();
             }
@@ -191,7 +189,7 @@ retry:
 extern "C" {
 // 申明变量
 #define XX(name) name ## _fun name ## _f = nullptr;
-    HOOK_FUN(XX);
+    HOOK_FUN(XX)
 #undef XX
 
 unsigned int sleep(unsigned int seconds) {

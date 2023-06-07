@@ -14,7 +14,7 @@ static SYLAR__SYSTEM__LOG(g_logger);
 
 template<class T>
 static T CreateMask(uint32_t bits) {
-    return (1 << (sizeof(T) * 8 - bits)) - 1;
+    return ~((1 << (sizeof(T) * 8 - bits)) - 1);
 }
 
 template<class T>
@@ -252,7 +252,7 @@ IPAddress::ptr IPAddress::Create(const char* address, uint16_t port) {
     memset(&hints, 0, sizeof(hints));
 
     // 地址为数字串，而不是一个主机名字符串。阻止域名解析
-    hints.ai_flags = AI_NUMERICHOST;
+    // hints.ai_flags = AI_NUMERICHOST;
     // 协议无关
     hints.ai_family = AF_UNSPEC;
 
@@ -328,7 +328,7 @@ IPAddress::ptr IPv4Address::broadcastAddress(uint32_t prefix_len) {
     }
     
     sockaddr_in baddr(m_addr);
-    baddr.sin_addr.s_addr |= byteswapOnLittleEndian(
+    baddr.sin_addr.s_addr |= ~byteswapOnLittleEndian(
         CreateMask<uint32_t>(prefix_len));
 
     return IPv4Address::ptr(new IPv4Address(baddr));
@@ -340,7 +340,7 @@ IPAddress::ptr IPv4Address::networkAddress(uint32_t prefix_len) {
     }
     
     sockaddr_in naddr(m_addr);
-    naddr.sin_addr.s_addr &= ~byteswapOnLittleEndian(
+    naddr.sin_addr.s_addr &= byteswapOnLittleEndian(
         CreateMask<uint32_t>(prefix_len));
 
     return IPv4Address::ptr(new IPv4Address(naddr));
@@ -350,7 +350,7 @@ IPAddress::ptr IPv4Address::subnetMask(uint32_t prefix_len) {
     sockaddr_in subnet;
     memset(&subnet, 0, sizeof(subnet));
     subnet.sin_family = AF_INET;
-    subnet.sin_addr.s_addr = ~byteswapOnLittleEndian(CreateMask<uint32_t>(prefix_len));
+    subnet.sin_addr.s_addr = byteswapOnLittleEndian(CreateMask<uint32_t>(prefix_len));
     return IPv4Address::ptr(new IPv4Address(subnet));
 }
 
@@ -429,7 +429,7 @@ std::ostream& IPv6Address::insert(std::ostream& os) const {
 IPAddress::ptr IPv6Address::broadcastAddress(uint32_t prefix_len) {
     sockaddr_in6 baddr(m_addr);
     baddr.sin6_addr.__in6_u.__u6_addr8[prefix_len / 8] |=
-        CreateMask<uint8_t>(prefix_len % 8);
+        ~CreateMask<uint8_t>(prefix_len % 8);
 
     for (int i = prefix_len / 8 + 1; i < 16; ++i) {
         baddr.sin6_addr.__in6_u.__u6_addr8[i] = 0xff;
@@ -442,7 +442,7 @@ IPAddress::ptr IPv6Address::broadcastAddress(uint32_t prefix_len) {
 IPAddress::ptr IPv6Address::networkAddress(uint32_t prefix_len) {
     sockaddr_in6 naddr(m_addr);
     naddr.sin6_addr.__in6_u.__u6_addr8[prefix_len / 8] &=
-        ~CreateMask<uint8_t>(prefix_len % 8);
+        CreateMask<uint8_t>(prefix_len % 8);
 
     for (int i = prefix_len / 8 + 1; i < 16; ++i) {
         naddr.sin6_addr.__in6_u.__u6_addr8[i] = 0x00;
@@ -456,7 +456,7 @@ IPAddress::ptr IPv6Address::subnetMask(uint32_t prefix_len) {
     memset(&subnet, 0, sizeof(subnet));
     subnet.sin6_family = AF_INET6;
     subnet.sin6_addr.__in6_u.__u6_addr8[prefix_len / 8] =
-        ~CreateMask<uint8_t>(prefix_len % 8);
+        CreateMask<uint8_t>(prefix_len % 8);
 
     for (int i = 0; i < (int32_t)prefix_len / 8; ++i) {
         subnet.sin6_addr.__in6_u.__u6_addr8[i] = 0xff;

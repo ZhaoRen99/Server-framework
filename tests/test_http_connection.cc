@@ -5,8 +5,9 @@
 static SYLAR__ROOT__LOG(g_logger);
 
 void test_pool() {
-    sylar::http::HttpConnectionPool::ptr pool(new sylar::http::HttpConnectionPool(
-        "www.sylar.top", "", 80, 10, 1000 * 30, 5));
+    // sylar::http::HttpConnectionPool::ptr pool(new sylar::http::HttpConnectionPool(
+    //     "www.sylar.top", "", 80, true, 10, 1000 * 30, 5));
+    auto pool = sylar::http::HttpConnectionPool::Create("http://www.sylar.top:80", "", 10, 1000 * 30, 5);
     sylar::IOManager::GetThis()->addTimer(1000, [pool]() {
             auto r = pool->doGet("/", 300);
             SYLAR_LOG_INFO(g_logger) << r->toString();
@@ -28,7 +29,7 @@ void run() {
     }
 
     sylar::http::HttpConnection::ptr conn(new sylar::http::HttpConnection(sock));
-    sylar::http::HttpRequest::ptr req(new sylar::http::HttpRequest);
+    sylar::http::HttpRequest::ptr req(new sylar::http::HttpRequest(0x11, false));
     req->setPath("/blog/");
     req->setHeader("host", "www.sylar.top");
     SYLAR_LOG_INFO(g_logger) << "req: " << std::endl << *req;
@@ -55,6 +56,7 @@ void run() {
 
 int main(int argc, char** argv) {
     sylar::IOManager iom(2);
+    g_logger->setLevel(sylar::LogLevel::INFO);
     iom.schedule(run);
     return 0;
 }

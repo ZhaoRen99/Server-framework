@@ -29,10 +29,51 @@ void test_iface() {
     }
 }
 
-void test_ipv4() {
+void test_ip() {
     auto addr = sylar::IPAddress::Create("www.baidu.com");
     if (addr) {
         SYLAR_LOG_INFO(g_logger) << addr->toString();
+    }
+}
+
+void test_ipv4() {
+    auto addr = sylar::IPv4Address::Create("112.80.248.75", 80);
+    auto saddr = addr->subnetMask(24);
+    auto baddr = addr->broadcastAddress(24);
+    auto naddr = addr->networkAddress(24);
+    if (addr) {
+        SYLAR_LOG_INFO(g_logger) << addr->toString();
+    }
+    if (saddr) {
+        SYLAR_LOG_INFO(g_logger) << saddr->toString();
+    }
+    if (baddr) {
+        SYLAR_LOG_INFO(g_logger) << baddr->toString();
+    }
+    if (naddr) {
+        SYLAR_LOG_INFO(g_logger) << naddr->toString();
+    }
+}
+
+void test_ipv6() {
+    auto addr = sylar::IPv6Address::Create("fe80::215:5dff:fe20:e26a", 80);
+    if (addr) {
+        SYLAR_LOG_INFO(g_logger) << addr->toString();
+    }
+    auto saddr = addr->subnetMask(64);
+    auto baddr = addr->broadcastAddress(64);
+    auto naddr = addr->networkAddress(64);
+    if (addr) {
+        SYLAR_LOG_INFO(g_logger) << addr->toString();
+    }
+    if (saddr) {
+        SYLAR_LOG_INFO(g_logger) << saddr->toString();
+    }
+    if (baddr) {
+        SYLAR_LOG_INFO(g_logger) << baddr->toString();
+    }
+    if (naddr) {
+        SYLAR_LOG_INFO(g_logger) << naddr->toString();
     }
 }
 
@@ -44,7 +85,8 @@ int main(int argc, char** argv) {
 
     // test();
     // test_iface();
-    test_ipv4();
-
+    // test_ip();
+    // test_ipv4();
+    test_ipv6();
     return 0;
 }

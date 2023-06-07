@@ -21,6 +21,7 @@ void run() {
 
 int main(int argc, char** argv) {
     sylar::IOManager iom(2);
+    g_logger->setLevel(sylar::LogLevel::INFO);
     iom.schedule(run);
     return 0;
 }

@@ -3,6 +3,7 @@
 #include "../sylar/iomanager.h"
 #include "../sylar/socket.h"
 #include "../sylar/bytearray.h"
+#include "../sylar/streams/socket_stream.h"
 
 static SYLAR__ROOT__LOG(g_logger);
 
@@ -20,15 +21,44 @@ EchoServer::EchoServer(int type)
     :m_type(type){
     
 }
+// void EchoServer::handleClient(sylar::Socket::ptr client) {
+//     SYLAR_LOG_INFO(g_logger) << "handllClient " << *client;
+//     sylar::ByteArray::ptr ba(new sylar::ByteArray);
+//     while (true) {
+//         ba->clear();
+//         std::vector<iovec> iovs;
+//         ba->getWriteBuffers(iovs, 1024);
+//         SYLAR_LOG_INFO(g_logger) << "&iovs[0]: " << &iovs[0] <<" iovs.size(): " << iovs.size();
+//         int rt = client->recv(&iovs[0], iovs.size());
+//         if (rt == 0) {
+//             SYLAR_LOG_INFO(g_logger) << "client close: " << *client;
+//             break;
+//         } else if (rt < 0) {
+//             SYLAR_LOG_INFO(g_logger) << "client error rt = " << rt
+//                 << " errno = " << errno << " strerr = " << strerror(errno);
+//             break;
+//         }
+//         ba->setPosition(ba->getPosition() + rt);
+//         ba->setPosition(0);
+        
+//         if (m_type == 1) {  //text
+//             SYLAR_LOG_INFO(g_logger) << "\n" << ba->toString();
+//         } else {
+//             SYLAR_LOG_INFO(g_logger) << "\n" << ba->toHexString();
+//         }
+//     }
+// }
+
 void EchoServer::handleClient(sylar::Socket::ptr client) {
     SYLAR_LOG_INFO(g_logger) << "handllClient " << *client;
+    sylar::SocketStream::ptr tcp(new sylar::SocketStream(client));
     sylar::ByteArray::ptr ba(new sylar::ByteArray);
     while (true) {
+        SYLAR_LOG_INFO(g_logger) << "==== while ====";
         ba->clear();
-        std::vector<iovec> iovs;
-        ba->getWriteBuffers(iovs, 1024);
-        SYLAR_LOG_INFO(g_logger) << "&iovs[0]: " << &iovs[0] <<" iovs.size(): " << iovs.size();
-        int rt = client->recv(&iovs[0], iovs.size());
+        int rt = tcp->read(ba, 1024);
+        SYLAR_LOG_INFO(g_logger) << "read rt = " << rt;
+
         if (rt == 0) {
             SYLAR_LOG_INFO(g_logger) << "client close: " << *client;
             break;
@@ -37,9 +67,8 @@ void EchoServer::handleClient(sylar::Socket::ptr client) {
                 << " errno = " << errno << " strerr = " << strerror(errno);
             break;
         }
-        ba->setPosition(ba->getPosition() + rt);
-        ba->setPosition(0);
         
+        ba->setPosition(0);
         if (m_type == 1) {  //text
             SYLAR_LOG_INFO(g_logger) << "\n" << ba->toString();
         } else {
@@ -70,6 +99,7 @@ int main(int argc, char** argv) {
     }
 
     sylar::IOManager iom(2);
+    g_logger->setLevel(sylar::LogLevel::INFO);
     iom.schedule(run);
     
     return 0;

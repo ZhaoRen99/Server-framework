@@ -13,7 +13,8 @@ void test_response() {
     rep->setBody("hello sylar");
     rep->setStatue((sylar::http::HttpStatus)400);
     rep->setClose(false);
-
+    rep->setCookie("key", "100", time(0), "\\sylar", "www.sylar.top", true);
+    
     rep->dump(std::cout) << std::endl;
 }
 

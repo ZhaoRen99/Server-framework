@@ -67,7 +67,7 @@ void TcpServer::startAccept(Socket::ptr sock) {
     while (!m_isStop) {
         Socket::ptr client = sock->accept();
         if (client) {
-            SYLAR_LOG_DEBUG(g_logger) << "accept client" << client;
+            SYLAR_LOG_INFO(g_logger) << "accept client" << *client;
             client->setRecvTimeout(m_recvTimeout);
             // handleClient 结束之前， TcpServer不能结束，shared_from_this，把自己传进去
             m_worker->schedule(std::bind(&TcpServer::handleClient
@@ -104,7 +104,7 @@ void TcpServer::stop() {
 }
 
 void TcpServer::handleClient(Socket::ptr client) {
-    SYLAR_LOG_INFO(g_logger) << "handleClient: " << *client;
+    SYLAR_LOG_DEBUG(g_logger) << "handleClient: " << *client;
 }
 
 }

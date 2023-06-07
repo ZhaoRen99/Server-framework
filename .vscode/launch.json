@@ -10,7 +10,7 @@
             "request": "launch", //请求配置类型，可以是启动或者是附加
             //"program": "${workspaceFolder}/tests/test", //程序可执行文件的完整路径，${workspaceFolder}表示远程连接的初始路径
             "program": "${workspaceFolder}/bin/test", //程序可执行文件的完整路径，${workspaceFolder}表示远程连接的初始路径
-            "args": [], //传递给程序的命令行参数
+            "args": [""], //传递给程序的命令行参数
             "stopAtEntry": false,//可选参数，如果为true,调试程序应该在入口（main）处停止
             "cwd": "${workspaceFolder}", //目标的工作目录
             "environment": [], //表示要预设的环境变量

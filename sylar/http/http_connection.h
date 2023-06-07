@@ -1,7 +1,7 @@
 #ifndef __SYLAR_HTTP_CONNECTION_H__
 #define __SYLAR_HTTP_CONNECTION_H__
 
-#include "../socket_stream.h"
+#include "../streams/socket_stream.h"
 #include "../uri.h"
 #include "../mutex.h"
 #include "http.h"
@@ -101,9 +101,16 @@ public:
     typedef std::shared_ptr<HttpConnectionPool> ptr;
     typedef Mutex MutexType;
 
+    static HttpConnectionPool::ptr Create(const std::string& uri
+        , const std::string& vhost
+        , uint32_t max_size
+        , uint32_t max_alive_time
+        , uint32_t max_request);
+    
     HttpConnectionPool(const std::string& host
         , const std::string& vhost
         , uint16_t port
+        , bool is_https
         , uint32_t max_size
         , uint32_t max_alive_time
         , uint32_t max_request);
@@ -136,11 +143,11 @@ public:
         , const std::map<std::string, std::string>& headers = {}
         , const std::string& body = "");
 
-    HttpResult::ptr doRequest(HttpMethod method
-        , Uri::ptr uri
-        , uint64_t timeout_ms
-        , const std::map<std::string, std::string>& headers = {}
-        , const std::string& body = "");
+    // HttpResult::ptr doRequest(HttpMethod method
+    //     , Uri::ptr uri
+    //     , uint64_t timeout_ms
+    //     , const std::map<std::string, std::string>& headers = {}
+    //     , const std::string& body = "");
 
     HttpResult::ptr doRequest(HttpRequest::ptr req
         , uint64_t timeout_ms);
@@ -151,11 +158,12 @@ private:
 private:
     std::string m_host;
     std::string m_vhost;
+    bool m_isHttps;
     uint16_t m_port;
     uint32_t m_maxSize;
     uint32_t m_maxAliveTime;
     uint32_t m_maxRequest;
-    
+
     MutexType m_mutex;
     std::list<HttpConnection*> m_conns;
     std::atomic<int32_t> m_total = { 0 };

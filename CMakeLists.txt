@@ -11,6 +11,11 @@ include_directories(/apps/sylar/include)
 link_directories(/apps/sylar/lib)
 link_directories(/apps/sylar/lib64)
 
+find_package(ZLIB REQUIRED)
+if(ZLIB_FOUND)
+    include_directories(${ZLIB_INCLUDE_DIR})
+endif()
+
 # set(CMAKE_BUILD_TYPE Debug)
 set(LIB_SRC
         sylar/address.cc
@@ -34,7 +39,8 @@ set(LIB_SRC
         sylar/scheduler.cc
         sylar/socket.cc
         sylar/stream.cc
-        sylar/socket_stream.cc
+        sylar/streams/socket_stream.cc
+        sylar/streams/zlib_stream.cc
         sylar/thread.cc
         sylar/timer.cc
         sylar/tcp_server.cc
@@ -57,6 +63,7 @@ set(LIBS
         dl
         yaml-cpp
         pthread
+        ${ZLIB_LIBRARIES}
    )
 
 sylar_add_executable(test "tests/test.cc" sylar "${LIBS}")

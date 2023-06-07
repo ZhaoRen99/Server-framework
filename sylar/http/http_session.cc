@@ -85,6 +85,6 @@ int HttpSession::sendResponse(HttpResponse::ptr rsp) {
     std::string data = ss.str();
     return writeFixSize(data.c_str(), data.size());
 }
-    
+
 }
 }

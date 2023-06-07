@@ -19,7 +19,7 @@ void test_request() {
     
     tmp.resize(tmp.size() - s);
     std::cout << parser.getData()->toString();
-    std::cout << tmp << "\n";
+    std::cout << tmp << std::endl;
 }
 
 const char test_response_data[] = "HTTP/1.1 200 OK\r\n"
@@ -31,7 +31,8 @@ const char test_response_data[] = "HTTP/1.1 200 OK\r\n"
                             "Content-Length: 81\r\n"
                             "Cache-Control: max-age=86400\r\n"
                             "Expires: Wed, 05 Jun 2019 15:43:56 GMT\r\n"
-                            "Connection: Close\r\n"
+                            "Connection: keep-alive\r\n"
+                            "Set-Cookie: BAIDUID_BFESS=EF8EC2CD8B4B1B7DAD0552BF0CF7EC3E:FG=1; Path=/; Domain=baidu.com; Expires=Tue, 04 Jun 2024 13:56:34 GMT; Max-Age=31536000; Secure; SameSite=None\r\n"
                             "Content-Type: text/html\r\n\r\n"
                             "<html>\r\n"
                             "<meta http-equiv=\"refresh\" content=\"0;url=http://www.baidu.com/\">\r\n"
@@ -41,7 +42,7 @@ void test_response() {
     sylar::http::HttpResponseParser parser;
     std::string tmp = test_response_data;
     size_t s = parser.execute(&tmp[0], tmp.size(), false);
-    SYLAR_LOG_ERROR(g_logger) << "execute rt = " << s
+    SYLAR_LOG_INFO(g_logger) << "execute rt = " << s
         << " has_error = " << parser.hasError()
         << " is_finished = " << parser.isFinished()
         << " total = " << tmp.size()
@@ -49,7 +50,7 @@ void test_response() {
 
     tmp.resize(tmp.size() - s);
     std::cout << parser.getData()->toString();
-    std::cout << tmp << "\n";
+    std::cout << tmp << std::endl;
 }
 
 int main(int argc, char** argv) {

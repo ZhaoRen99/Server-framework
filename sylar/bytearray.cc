@@ -6,6 +6,7 @@
 #include "log.h"
 #include "bytearray.h"
 #include "endian.h"
+#include <math.h>
 
 namespace sylar {
     
@@ -113,17 +114,28 @@ void ByteArray::writeFuint64(uint64_t value) {
     write(&value, sizeof(value));
 }
 
-template<class T>
-static T EncodeZigzag(const T& v) {
+
+static uint32_t EncodeZigzag(const int32_t& v) {
     if (v < 0) {
-        return ((T)(-v)) * 2 - 1;
+        return ((uint32_t)(-v)) * 2 - 1;
     } else {
         return v * 2;
     }
 }
 
-template<class T>
-static T DecodeZigzag(const T& v) {
+static uint64_t EncodeZigzag(const int64_t& v) {
+    if (v < 0) {
+        return ((uint64_t)(-v)) * 2 - 1;
+    } else {
+        return v * 2;
+    }
+}
+
+static int32_t DecodeZigzag(const uint32_t& v) {
+    return (v >> 1) ^ -(v & 1);
+}
+
+static int64_t DecodeZigzag(const uint64_t& v) {
     return (v >> 1) ^ -(v & 1);
 }
 
@@ -502,7 +514,8 @@ void ByteArray::addCapacity(size_t size) {
     }
 
     size = size - old_cap;
-    size_t count = (size / m_baseSize) + (((size % m_baseSize) > old_cap) ? 1 : 0);
+    // size_t count = (size / m_baseSize) + (((size % m_baseSize) > old_cap) ? 1 : 0);
+    size_t count = ceil(1.0 * size / m_baseSize);
     Node* tmp = m_root;
     while (tmp->next) {
         tmp = tmp->next;
@@ -589,20 +602,20 @@ uint64_t ByteArray::getReadBuffers(std::vector<iovec>& buffers
 
     size_t npos = position % m_baseSize;
 
-    // size_t count = position / m_baseSize;
-    // Node* cur = m_root;
-    // while (count > 0) {
-    //     cur = cur->next;
-    //     --count;
-    // }
-
-    // XXX: ÐÞ¸Äcur
-    size_t count = npos ? (position / m_baseSize + 1) : (position / m_baseSize);
+    size_t count = position / m_baseSize;
     Node* cur = m_root;
-    while (count > 1) {
+    while (count > 0) {
         cur = cur->next;
         --count;
     }
+
+    // XXX: ÐÞ¸Äcur
+    // size_t count = npos ? (position / m_baseSize + 1) : (position / m_baseSize);
+    // Node* cur = m_root;
+    // while (count > 1) {
+    //     cur = cur->next;
+    //     --count;
+    // }
 
     size_t ncap = cur->size - npos;
     struct iovec iov;
@@ -638,9 +651,11 @@ uint64_t ByteArray::getWriteBuffers(std::vector<iovec>& buffers, uint64_t len) {
     size_t ncap = m_cur->size - npos;
     struct iovec iov;
     Node* cur = m_cur;
+    SYLAR_LOG_INFO(g_logger) << ncap;
+    SYLAR_LOG_INFO(g_logger) << len;
     
     while (len > 0) {
-        if (ncap > len) {
+        if (ncap >= len) {
             iov.iov_base = cur->ptr + npos;
             iov.iov_len = len;
             len = 0;

@@ -121,7 +121,7 @@ public:
     uint64_t getReadTimeout() const { return m_recvTimeout; }
     std::string getName() const { return m_name; }
     void setReadTimeout(uint64_t v) { m_recvTimeout = v; }
-    void setName(const std::string& v) { m_name = v; }
+    virtual void setName(const std::string& v) { m_name = v; }
 
     bool isStop() const { return m_isStop; }
 

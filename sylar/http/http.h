@@ -8,7 +8,7 @@
 #include <sstream>
 #include <boost/lexical_cast.hpp>
 
-
+#include "../util.h"
 
 namespace sylar {
 namespace http {
@@ -255,7 +255,12 @@ public:
 
     std::ostream& dump(std::ostream& os) const;
     std::string toString() const;
-    
+
+    void init();
+    void initParam();
+    void initQueryParam();
+    void initBodyParam();
+    void initCookies();
 private:
     // HTTP方法
     HttpMethod m_method;
@@ -265,6 +270,7 @@ private:
     // 是否自动关闭
     bool m_close;
 
+    uint8_t m_parserParamFlag;
     // 请求路径
     std::string m_path;
     // 请求参数
@@ -320,6 +326,7 @@ public:
     std::ostream& dump(std::ostream& os) const;
     std::string toString() const;
 
+    void setRedirect(const std::string& uri);
     void setCookie(const std::string& key, const std::string& val,
         time_t expired, const std::string& path,
         const std::string& domain, bool secure);

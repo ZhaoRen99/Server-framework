@@ -23,18 +23,18 @@ void test() {
                 << " base_len = " << base_len << " size = " << ba->getSize(); \
     }
 
-    // XX(int8_t, 100, writeFint8, readFint8, 1);
-    // XX(uint8_t, 100, writeFuint8, readFuint8, 1);
-    // XX(int16_t, 100, writeFint16, readFint16, 1);
-    // XX(uint16_t, 100, writeFuint16, readFuint16, 1);
-    // XX(int32_t, 100, writeFint32, readFint32, 1);
-    // XX(uint32_t, 100, writeFuint32, readFuint32, 1);
-    // XX(int64_t, 100, writeFint64, readFint64, 1);
-    // XX(uint64_t, 100, writeFuint64, readFuint64, 1);
+    XX(int8_t, 100, writeFint8, readFint8, 1);
+    XX(uint8_t, 100, writeFuint8, readFuint8, 1);
+    XX(int16_t, 100, writeFint16, readFint16, 1);
+    XX(uint16_t, 100, writeFuint16, readFuint16, 1);
+    XX(int32_t, 100, writeFint32, readFint32, 1);
+    XX(uint32_t, 100, writeFuint32, readFuint32, 1);
+    XX(int64_t, 100, writeFint64, readFint64, 1);
+    XX(uint64_t, 100, writeFuint64, readFuint64, 1);
 
-    // XX(int32_t, 100, writeInt32, readInt32, 1);
-    // XX(uint32_t, 100, writeUint32, readUint32, 1);
-    // XX(int64_t, 100, writeInt64, readInt64, 1);
+    XX(int32_t, 100, writeInt32, readInt32, 1);
+    XX(uint32_t, 100, writeUint32, readUint32, 1);
+    XX(int64_t, 100, writeInt64, readInt64, 1);
     XX(uint64_t, 100, writeUint64, readUint64, 492);
 
 #undef XX
@@ -87,6 +87,8 @@ void test() {
 int main(int argc, char** argv) {
     // sylar::IOManager iom;
     // iom.schedule(test);
-    test();
+    // test();
+
+    SYLAR_LOG_INFO(g_logger) << sizeof(int8_t);
     return 0;
 }

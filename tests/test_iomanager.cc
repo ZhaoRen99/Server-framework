@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
+static SYLAR__SYSTEM__LOG(s_logger);
 int sock = 0;
 
 void test_fiber() {
@@ -20,9 +21,9 @@ void test_fiber() {
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_port = htons(80);
-    inet_pton(AF_INET, "14.119.104.254", &addr.sin_addr.s_addr);
+    inet_pton(AF_INET, "112.80.248.75", &addr.sin_addr.s_addr);
 
-    if(!connect(sock, (const sockaddr*)&addr, sizeof(addr))) {
+    if (!connect(sock, (const sockaddr*)&addr, sizeof(addr))) {
     } else if(errno == EINPROGRESS) {
         SYLAR_LOG_INFO(g_logger) << "add event errno=" << errno << " " << strerror(errno);
 
@@ -32,7 +33,7 @@ void test_fiber() {
             int rt = read(sock, temp, 1000);
             if (rt >= 0) {
                 std::string ans(temp, rt);
-                SYLAR_LOG_INFO(g_logger) << "read:["<< ans << "]";
+                SYLAR_LOG_INFO(g_logger) << "read:\n["<< ans << "]";
             } else {
                 SYLAR_LOG_INFO(g_logger) << "read rt = " << rt;
             }
@@ -44,9 +45,11 @@ void test_fiber() {
             // sylar::IOManager::GetThis()->cancelEvent(sock, sylar::IOManager::WRITE);
             // close(sock);
             });
+
     } else {
         SYLAR_LOG_INFO(g_logger) << "else " << errno << " " << strerror(errno);
     }
+    SYLAR_LOG_INFO(g_logger) << "test_fiber end";
 }
 
 void test01() {
@@ -64,12 +67,15 @@ void test_timer() {
             s_timer->reset(2000, true);
             // s_timer->cancel();
         }
+        if (i == 10) {
+            s_timer->cancel();
+        }
     }, true);
 }
 
 int main(int argc, char** argv) {
+    // g_logger->setLevel(sylar::LogLevel::INFO);
     // test01();
-    // test_timer();
-    test_fiber();
+    test_timer();
     return 0;
 }

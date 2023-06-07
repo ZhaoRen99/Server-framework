@@ -56,7 +56,7 @@ Fiber* Scheduler::GetMainFiber() {
 }
 
 void Scheduler::start() {
-    SYLAR_LOG_INFO(g_logger) << "start()";
+    // SYLAR_LOG_DEBUG(g_logger) << "start()";
     MutexType::Lock lock(m_mutex);
     // 已经启动了
     if (!m_stopping) {
@@ -81,11 +81,11 @@ void Scheduler::start() {
     //     m_rootFiber->call();
     // }
 
-    SYLAR_LOG_INFO(g_logger) << "start() end";
+    // SYLAR_LOG_DEBUG(g_logger) << "start() end";
 }
 
 void Scheduler::stop() {
-    SYLAR_LOG_INFO(g_logger) << "stop()";
+    // SYLAR_LOG_DEBUG(g_logger) << "stop()";
     m_autoStop = true;
     if (m_rootFiber 
                 && m_threadCount == 0
@@ -150,7 +150,7 @@ void Scheduler::setThis() {
 }
 
 void Scheduler::run() {
-    SYLAR_LOG_INFO(g_logger) << "run()";
+    SYLAR_LOG_DEBUG(g_logger) << "run()";
     set_hook_enable(true);
     setThis();
 
@@ -161,8 +161,8 @@ void Scheduler::run() {
         t_fiber = Fiber::GetThis().get();
     }
 
-    SYLAR_LOG_DEBUG(g_logger) << "new idle_fiber";
     Fiber::ptr idle_fiber(new Fiber(std::bind(&Scheduler::idle, this)));
+    // SYLAR_LOG_DEBUG(g_logger) << "new idle_fiber :" << idle_fiber->getId();
     Fiber::ptr cb_fiber;
 
     FiberAndThread ft;
@@ -212,8 +212,8 @@ void Scheduler::run() {
             if (cb_fiber) {
                 cb_fiber->reset(ft.cb);
             } else {
-                SYLAR_LOG_DEBUG(g_logger) << "new ft.cb";
                 cb_fiber.reset(new Fiber(ft.cb));
+                // SYLAR_LOG_DEBUG(g_logger) << "new ft.cb: " << cb_fiber->getId();
             }
             ft.reset();
             cb_fiber->swapIn();
@@ -234,7 +234,7 @@ void Scheduler::run() {
                 continue;
             }
             if (idle_fiber->getState() == Fiber::TERM) {
-                SYLAR_LOG_INFO(g_logger) << "idle_fiber term"; 
+                SYLAR_LOG_DEBUG(g_logger) << "idle_fiber term"; 
                 break;
             }
 
@@ -248,8 +248,9 @@ void Scheduler::run() {
         }
     }
 }
+
 void Scheduler::tickle() {
-    SYLAR_LOG_INFO(g_logger) << "tickle()";
+    SYLAR_LOG_DEBUG(g_logger) << "tickle()";
 }
 
 bool Scheduler::stopping() {
@@ -266,7 +267,7 @@ bool Scheduler::stopping() {
 }
 
 void Scheduler::idle() {
-    SYLAR_LOG_INFO(g_logger) << "idle()";
+    SYLAR_LOG_DEBUG(g_logger) << "idle()";
     while (!stopping()) {
         sylar::Fiber::YieldToHold();
     }

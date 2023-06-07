@@ -291,17 +291,17 @@ bool IOManager::stopping() {
 // }
 
 void IOManager::idle() {
-    SYLAR_LOG_INFO(g_logger) << "idle()";
+    SYLAR_LOG_DEBUG(g_logger) << "idle()";
     epoll_event* events = new epoll_event[64]();
     // 使用智能指针托管events， 离开idle自动释放
     std::shared_ptr<epoll_event> shared_events(events, [](epoll_event *ptr)
                                               { delete[] ptr; });
 
-    while (true) {
+    while (true) { 
         uint64_t next_timeout = 0;
         if (stopping(next_timeout)) {
-            SYLAR_LOG_INFO(g_logger) << "name = " << getName()
-                                     << ", idle stopping exit";
+            SYLAR_LOG_INFO(g_logger) << sylar::Thread::GetName()
+                                     << " is done";
             break;
         }
         
