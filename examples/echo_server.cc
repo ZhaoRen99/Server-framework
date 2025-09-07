@@ -1,9 +1,20 @@
-#include "../sylar/tcp_server.h"
-#include "../sylar/log.h"
-#include "../sylar/iomanager.h"
-#include "../sylar/socket.h"
-#include "../sylar/bytearray.h"
-#include "../sylar/streams/socket_stream.h"
+/*
+ * @Author: wangzhaoren <wangzhaoren99@163.com>
+ * @Date: 2025-09-05 14:35:10
+ * @LastEditors: wangzhaoren <wangzhaoren99@163.com>
+ * @LastEditTime: 2025-09-06 17:00:14
+ * @FilePath: /Server-framework/examples/echo_server.cc
+ * @Description: 
+ * 
+ * Copyright (c) 2025 by wangzhaoren, All Rights Reserved. 
+ */
+
+#include "sylar/net/tcp_server.h"
+#include "sylar/log/log.h"
+#include "sylar/io/iomanager.h"
+#include "sylar/net/socket.h"
+#include "sylar/net/bytearray.h"
+#include "sylar/streams/socket_stream.h"
 
 static SYLAR__ROOT__LOG(g_logger);
 

@@ -1,1 +1,8 @@
+.vscode/
+
 build/
+build_sylar/
+
+install_sylar/
+
+source/src/http/*.rl*

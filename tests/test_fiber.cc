@@ -1,41 +1,51 @@
-#include "../sylar/sylar.h"
+/*
+ * @Author: wangzhaoren <wangzhaoren99@163.com>
+ * @Date: 2025-09-05 14:35:10
+ * @LastEditors: wangzhaoren <wangzhaoren99@163.com>
+ * @LastEditTime: 2025-09-06 15:56:40
+ * @FilePath: /Server-framework/tests/test_fiber.cc
+ * @Description:
+ *
+ * Copyright (c) 2025 by wangzhaoren, All Rights Reserved.
+ */
+#include "sylar/common/sylar.h"
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
 
 void run_in_fiber() {
-    SYLAR_LOG_INFO(g_logger) << "run_in_fiber begin";
-    sylar::Fiber::Yield();
-    SYLAR_LOG_INFO(g_logger) << "run_in_fiber end";
-    sylar::Fiber::Yield();
+  SYLAR_LOG_INFO(g_logger) << "run_in_fiber begin";
+  sylar::Fiber::Yield();
+  SYLAR_LOG_INFO(g_logger) << "run_in_fiber end";
+  sylar::Fiber::Yield();
 }
 
 void test_fiber() {
-    SYLAR_LOG_INFO(g_logger) << "main after begin -l";
-    {   
-        sylar::Fiber::GetThis(); 
-        SYLAR_LOG_INFO(g_logger) << "main after begin";
-        sylar::Fiber::ptr fiber(new sylar::Fiber(run_in_fiber, 0, true));
-        fiber->call();
-        SYLAR_LOG_INFO(g_logger) << "main after swapIn";
-        fiber->call();
-        SYLAR_LOG_INFO(g_logger) << "main after end";
-        fiber->call();
-    }
-    SYLAR_LOG_INFO(g_logger) << "main after end -l";
+  SYLAR_LOG_INFO(g_logger) << "main after begin -l";
+  {
+    sylar::Fiber::GetThis();
+    SYLAR_LOG_INFO(g_logger) << "main after begin";
+    sylar::Fiber::ptr fiber(new sylar::Fiber(run_in_fiber, 0, true));
+    fiber->call();
+    SYLAR_LOG_INFO(g_logger) << "main after swapIn";
+    fiber->call();
+    SYLAR_LOG_INFO(g_logger) << "main after end";
+    fiber->call();
+  }
+  SYLAR_LOG_INFO(g_logger) << "main after end -l";
 }
 
 int main(int argc, char** argv) {
-    sylar::Thread::SetName("main");
+  sylar::Thread::SetName("main");
 
-    std::vector<sylar::Thread::ptr> thrs;
-    for (int i = 0; i < 3; ++i) {
-        thrs.push_back(sylar::Thread::ptr(
-            new sylar::Thread(&test_fiber, "name_" + std::to_string(i))));
-    }
+  std::vector<sylar::Thread::ptr> thrs;
+  for (int i = 0; i < 3; ++i) {
+    thrs.push_back(sylar::Thread::ptr(
+        new sylar::Thread(&test_fiber, "name_" + std::to_string(i))));
+  }
 
-    for (auto i : thrs) {
-        i->join();
-    }
+  for (auto i : thrs) {
+    i->join();
+  }
 
-    return 0;
+  return 0;
 }
