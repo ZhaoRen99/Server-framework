@@ -43,6 +43,8 @@ if(EXISTS "${PATH_TO_CMAKELISTS_TXT}")
     Some junk files were created in this folder (CMakeCache.txt, CMakeFiles); you should delete those.")
 endif()
 
+add_definitions(-DTOP_DIR_PATH="${CMAKE_CURRENT_SOURCE_DIR}")
+
 # #####################################################################################################################
 # DEPENDENCIES
 # #####################################################################################################################

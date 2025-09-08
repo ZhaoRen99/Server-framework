@@ -2,7 +2,7 @@
  * @Author: wangzhaoren <wangzhaoren@airia.cn>
  * @Date: 2025-09-05 15:22:31
  * @LastEditors: wangzhaoren <wangzhaoren99@163.com>
- * @LastEditTime: 2025-09-06 15:41:32
+ * @LastEditTime: 2025-09-08 13:38:55
  * @FilePath: /Server-framework/source/src/env/env.cc
  * @Description: 
  * 
@@ -16,6 +16,10 @@
 #include <iomanip>
 
 #include "sylar/log/log.h"
+
+#ifndef TOP_DIR_PATH
+#define TOP_DIR_PATH ""
+#endif
 
 namespace sylar {
 
@@ -34,6 +38,10 @@ bool Env::init(int argc, char** argv) {
 
   auto pos = m_exe.find_last_of("/");
   m_cwd = m_exe.substr(0, pos) + "/";
+
+  // TODO: 设置当前路径为根目录
+  m_cwd = TOP_DIR_PATH;
+  m_cwd.append("/");
 
   m_program = argv[0];
   // -d -config /path/to/config -file xxxx

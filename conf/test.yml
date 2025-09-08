@@ -1,0 +1,40 @@
+system:
+  port: 9999
+  value: 30.2
+  name: zhaoren
+  int_vec: [1,2,3,4,5]
+  int_list: [1,2,3,4,5]
+  int_unordered_set: [1,2,3,4,5]
+  str_int_map: 
+    a: 1
+    b: 2
+    c: 3
+  str_int_unordered_map: 
+    d: 1
+    e: 2
+    f: 3
+
+class:
+  person:
+    name: zhaoren
+    age: 18
+    sex: true
+
+class:
+  map:
+    01:
+      name: wzr01
+      age: 1
+      sex: true
+    02:
+      name: wzr02 
+      age: 2
+      sex: false
+  vec_map:
+    v1:
+      - name: sylar01
+        age: 1
+        sex: true
+      - name: sylar02
+        age: 2
+        sex: false

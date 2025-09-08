@@ -8,10 +8,6 @@ add_library(
 
 force_redefine_file_macro_for_sources(sylar_config)
 
-target_link_libraries(sylar_config PRIVATE 
-    ${Boost_LIBRARIES}
-)
-
 set(ALL_OBJECT_FILES
     ${ALL_OBJECT_FILES}
     $<TARGET_OBJECTS:sylar_config>

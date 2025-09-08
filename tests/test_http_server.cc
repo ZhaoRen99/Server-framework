@@ -2,7 +2,7 @@
  * @Author: wangzhaoren <wangzhaoren99@163.com>
  * @Date: 2025-09-05 14:35:10
  * @LastEditors: wangzhaoren <wangzhaoren99@163.com>
- * @LastEditTime: 2025-09-06 16:03:01
+ * @LastEditTime: 2025-09-08 13:21:35
  * @FilePath: /Server-framework/tests/test_http_server.cc
  * @Description:
  *
@@ -19,7 +19,7 @@ void run() {
   sylar::Address::ptr addr2 =
       sylar::Address::LookupAnyIPAddress("127.0.0.1:8030");
   std::vector<sylar::Address::ptr> addr, fail;
-  // addr.push_back(addr1);
+  addr.push_back(addr1);
   addr.push_back(addr2);
 
   server->setName("zhaoren/1.0.0");

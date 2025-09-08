@@ -19,7 +19,7 @@
 
 #define SYLAR_VERSION "0.0.0.1"
 
-#define SYLAR_GIT_HASH "b64992b9cda9c5a4053d9f6ca1c35804d8ad910b"
+#define SYLAR_GIT_HASH "0f887a05f4a4c67f034a308fefb6e6da1f4d0f9f"
 
 namespace sylar {
 

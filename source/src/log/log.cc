@@ -1,8 +1,11 @@
 #include "sylar/log/log.h"
 
+#include <filesystem>
 #include <map>
 
 #include "sylar/config/config.h"
+
+namespace fs = std::filesystem;
 
 namespace sylar {
 
@@ -377,6 +380,17 @@ bool FileLogAppender::reopen() {
     m_filestream.close();
   }
 
+  fs::path file_path(m_filename);
+  fs::path dir_path = file_path.parent_path();
+
+  if (!fs::exists(dir_path)) {
+    if (!fs::create_directories(dir_path)) {
+      std::cerr << "Failed to create directory: " << dir_path << std::endl;
+      return false;
+    }
+  }
+
+  // 打开文件
   m_filestream.open(m_filename, std::ios::app);
   return !!m_filestream;
 }
